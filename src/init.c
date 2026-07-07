@@ -71,16 +71,16 @@ int init_ping(t_ping *ping, int argc, char **argv)
     }
 
     //ttl test
-    // int ttl = 1;
+    int ttl = 1;
 
-    // if (setsockopt(ping->sockfd, IPPROTO_IP, IP_TTL,
-    //         &ttl, sizeof(ttl)) < 0)
-    // {
-    //     perror("setsockopt TTL");
-    //     close(ping->sockfd);
-    //     freeaddrinfo(ping->res);
-    //     return 1;
-    // }
+    if (setsockopt(ping->sockfd, IPPROTO_IP, IP_TTL,
+            &ttl, sizeof(ttl)) < 0)
+    {
+        perror("setsockopt TTL");
+        close(ping->sockfd);
+        freeaddrinfo(ping->res);
+        return 1;
+    }
 
     //set socket timout 
     if (setup_timeout(ping))

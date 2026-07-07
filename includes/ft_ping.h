@@ -82,6 +82,7 @@ int ping_loop(t_ping *ping);
 
 void print_usage(void);
 
-void print_icmp_error(struct iphdr *ip, struct icmphdr *icmp);
+void print_icmp_error(t_ping *ping, struct iphdr *ip, struct icmphdr *icmp);
+void print_ip_data(struct icmphdr *icmp);
 
 #endif

@@ -8,12 +8,17 @@ static double compute_rtt(struct timeval start, struct timeval end)
 
 static void print_reply(t_ping *ping, double rtt)
 {
-    printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\n",
+    printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms",
         ping->reply.bytes,
         ping->reply.ip,
         ping->reply.sequence,
         ping->reply.ttl,
         rtt);
+    if (ping->verbose)
+        printf(", id 0x%04x = %u",
+            getpid() & 0xffff,
+            getpid() & 0xffff);
+    printf("\n");
 }
 
 int ping_loop(t_ping *ping)

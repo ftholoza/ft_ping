@@ -52,7 +52,7 @@ int receive_ping(t_ping *ping)
     
         if (icmp->type != ICMP_ECHOREPLY)
         {
-            print_icmp_error(ip, icmp);
+            print_icmp_error(ping, ip, icmp);
             return 1;
         }
         
