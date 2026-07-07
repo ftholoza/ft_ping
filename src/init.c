@@ -71,7 +71,7 @@ int init_ping(t_ping *ping, int argc, char **argv)
     }
 
     //ttl test
-    int ttl = 1;
+    int ttl = 3;
 
     if (setsockopt(ping->sockfd, IPPROTO_IP, IP_TTL,
             &ttl, sizeof(ttl)) < 0)

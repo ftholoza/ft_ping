@@ -52,6 +52,7 @@ int receive_ping(t_ping *ping)
     
         if (icmp->type != ICMP_ECHOREPLY)
         {
+            ping->reply.bytes = received - ip_header_len;
             print_icmp_error(ping, ip, icmp);
             return 1;
         }

@@ -137,7 +137,7 @@ void print_icmp_error(t_ping *ping, struct iphdr *ip, struct icmphdr *icmp)
 
     addr.s_addr = ip->saddr;
 
-    printf("From %s: ", inet_ntoa(addr));
+    printf("%d bytes From %s: ", ping->reply.bytes , inet_ntoa(addr));
 
     if (icmp->type == ICMP_DEST_UNREACH)
         print_dest_unreach(icmp);
