@@ -39,7 +39,7 @@ static int parse_args(t_ping *ping, int argc, char **argv)
         return 0;
     }
 
-    fprintf(stderr, "Usage: %s [-v] destination\n", argv[0]);
+    fprintf(stderr, "ping: missing host operand\nTry 'ping -?' for more information.\n");
     return 1;
 }
 
@@ -71,16 +71,16 @@ int init_ping(t_ping *ping, int argc, char **argv)
     }
 
     //ttl test
-    int ttl = 3;
+    // int ttl = 3;
 
-    if (setsockopt(ping->sockfd, IPPROTO_IP, IP_TTL,
-            &ttl, sizeof(ttl)) < 0)
-    {
-        perror("setsockopt TTL");
-        close(ping->sockfd);
-        freeaddrinfo(ping->res);
-        return 1;
-    }
+    // if (setsockopt(ping->sockfd, IPPROTO_IP, IP_TTL,
+    //         &ttl, sizeof(ttl)) < 0)
+    // {
+    //     perror("setsockopt TTL");
+    //     close(ping->sockfd);
+    //     freeaddrinfo(ping->res);
+    //     return 1;
+    // }
 
     //set socket timout 
     if (setup_timeout(ping))
@@ -90,11 +90,13 @@ int init_ping(t_ping *ping, int argc, char **argv)
         return 1;
     }
 
-    printf("PING %s (%s): %d data bytes\n",
+    printf("PING %s (%s): %d data bytes",
         ping->target,
         ping->ip_str,
         PACKET_SIZE - (int)sizeof(struct icmphdr));
-
+    if (ping->verbose)
+        printf(", id 0x%04x = %u", getpid(), getpid());
+    printf("\n");
     return 0;
 }
 

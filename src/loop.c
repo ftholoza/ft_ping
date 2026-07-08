@@ -14,10 +14,7 @@ static void print_reply(t_ping *ping, double rtt)
         ping->reply.sequence,
         ping->reply.ttl,
         rtt);
-    if (ping->verbose)
-        printf(", id 0x%04x = %u",
-            getpid() & 0xffff,
-            getpid() & 0xffff);
+
     printf("\n");
 }
 

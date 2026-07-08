@@ -31,19 +31,15 @@ static void print_ip_header(struct iphdr *ip)
 
 static void print_ip_hdr_dump(struct iphdr *ip)
 {
-    size_t          i;
-    unsigned char   *bytes;
-
-    bytes = (unsigned char *)ip;
+    size_t i;
 
     printf("IP Hdr Dump:\n ");
-    i = 0;
-    while (i < sizeof(struct iphdr))
+
+    for (i = 0; i < sizeof(struct iphdr); i++)
     {
-        printf("%02x", bytes[i]);
+        printf("%02x", ((unsigned char *)ip)[i]);
         if (i % 2)
             printf(" ");
-        i++;
     }
     printf("\n");
 }
@@ -51,13 +47,9 @@ static void print_ip_hdr_dump(struct iphdr *ip)
 void print_ip_data(struct icmphdr *icmp)
 {
     struct iphdr    *ip;
-    unsigned char   *data;
+    struct icmphdr  *inner;
     int             hlen;
     int             size;
-    int             type;
-    int             code;
-    unsigned int    id;
-    unsigned int    seq;
 
     ip = (struct iphdr *)((unsigned char *)icmp + sizeof(struct icmphdr));
 
@@ -65,25 +57,21 @@ void print_ip_data(struct icmphdr *icmp)
     print_ip_header(ip);
 
     hlen = ip->ihl * 4;
-    data = (unsigned char *)ip + hlen;
+    inner = (struct icmphdr *)((unsigned char *)ip + hlen);
     size = ntohs(ip->tot_len) - hlen;
 
     if (ip->protocol == IPPROTO_ICMP)
     {
-        type = data[0];
-        code = data[1];
-
         printf("ICMP: type %u, code %u, size %u",
-            type,
-            code,
+            inner->type,
+            inner->code,
             size);
 
-        if (type == ICMP_ECHOREPLY || type == ICMP_ECHO)
+        if (inner->type == ICMP_ECHO || inner->type == ICMP_ECHOREPLY)
         {
-            id = data[4] * 256 + data[5];
-            seq = data[6] * 256 + data[7];
-
-            printf(", id 0x%04x, seq 0x%04x", id, seq);
+            printf(", id 0x%04x, seq 0x%04x",
+                ntohs(inner->un.echo.id),
+                ntohs(inner->un.echo.sequence));
         }
         printf("\n");
     }
